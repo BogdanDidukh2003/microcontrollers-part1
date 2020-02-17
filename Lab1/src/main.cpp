@@ -1,37 +1,31 @@
 #include <Arduino.h>
 #define DELAY_MS 700
+#define BUTTON_PIN 23
 
-const int ledPins[] = {A8, A9, A10, A11, A12, A13, A14, A15};
-const int buttonPin = 23;
-bool buttonIsPressed = false;
-
-const int ledPinsSize = sizeof(ledPins) / sizeof(ledPins[0]);
-
-inline void turnOnLedsLightShow(const int& msDelay);
+inline void turnOnLedsLightShow(volatile uint8_t& PORT, const int& msDelay);
 
 void setup() {
-  for (auto& ledPin : ledPins) {
-    pinMode(ledPin, OUTPUT);
-  }
-  pinMode(buttonPin, INPUT_PULLUP);
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  DDRK = 0xFF;
+  PORTK = 0;
 }
 
-void loop() {
-  buttonIsPressed = !digitalRead(buttonPin);
-  
-  if (buttonIsPressed) {
-    turnOnLedsLightShow(DELAY_MS);
+void loop() {  
+  if (!digitalRead(BUTTON_PIN)) {
+    turnOnLedsLightShow(PORTK, DELAY_MS);
   }
 }
 
-inline void turnOnLedsLightShow(const int& msDelay) {
-  for (int led = 0; led < ledPinsSize / 2; led++) {
-    digitalWrite(ledPins[ledPinsSize - 1 - led], HIGH);
+inline void turnOnLedsLightShow(volatile uint8_t& port, const int& msDelay) {
+  uint8_t start = B00000001, end = B10000000;
+
+  while (end > start) {
+    port = end;
     delay(msDelay);
-    digitalWrite(ledPins[ledPinsSize - 1 - led], LOW);
-    
-    digitalWrite(ledPins[led], HIGH);
+    port = start;
     delay(msDelay);
-    digitalWrite(ledPins[led], LOW);
+    end >>= 1;
+    start <<= 1;
   }
+  PORTK = 0;
 }
