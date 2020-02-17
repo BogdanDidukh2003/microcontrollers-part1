@@ -2,7 +2,7 @@
 #define DELAY_MS 700
 #define BUTTON_PIN 23
 
-inline void turnOnLedsLightShow(volatile uint8_t& PORT, const int& msDelay);
+inline void turnOnLedsLightShow(volatile uint8_t& port, const int& msDelay);
 
 void setup() {
   pinMode(BUTTON_PIN, INPUT_PULLUP);
