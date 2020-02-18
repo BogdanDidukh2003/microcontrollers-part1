@@ -71,6 +71,8 @@
       <workItem from="1582015768787" duration="2989000" />
       <workItem from="1582025907637" duration="10167000" />
       <workItem from="1582036114791" duration="3000" />
+      <workItem from="1582037408006" duration="602000" />
+      <workItem from="1582044427753" duration="1554000" />
     </task>
     <servers />
   </component>
@@ -96,6 +98,6 @@
     <state width="1807" height="263" key="GridCell.Tab.0.right/57.34.1863.1046@57.34.1863.1046" timestamp="1582036082143" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/LedInterfaceGUI$main.coverage" NAME="main Coverage Results" MODIFIED="1582035750042" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/LedInterfaceGUI$main.coverage" NAME="main Coverage Results" MODIFIED="1582045185337" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import TOP, BOTTOM, LEFT
+import serial
 
+PORT_CHECKING_INTERVAL_MS = 100
 LED_ICON_SIZE = 40
 LED_NUMBER = 8
 LED_OFF = 'skyblue'
@@ -93,6 +95,7 @@ def main():
 
     turn_on_led(led_indicators[1])
 
+    window.after(PORT_CHECKING_INTERVAL_MS, )
     window.mainloop()
 
 
@@ -102,6 +105,28 @@ def turn_on_led(led_indicator):
 
 def turn_off_led(led_indicator):
     led_indicator[0].itemconfig(led_indicator[1], fill=LED_OFF)
+
+
+def parse_algorithm_encoding(coded_string):
+    return tuple(map(int, coded_string.split(b'\r\n')[0].split(b',')))
+
+
+def get_led_order_to_indicator_dictionary_from_encoded_data(encoded_data):
+    led_order_to_pin = dict()
+    for index in range(len(encoded_data)):
+        led_order_to_pin[index] = encoded_data[index]
+    mapped_pins_to_indicators = sorted(led_order_to_pin, key=led_order_to_pin.get)
+    led_order_to_indicator = dict()
+    for pin in range(len(mapped_pins_to_indicators)):
+        led_order_to_indicator[mapped_pins_to_indicators[pin]] = pin
+
+    return led_order_to_indicator
+
+
+def get_led_order_to_indicator_dictionary_from_coded_algorithm(coded_algorithm):
+    return get_led_order_to_indicator_dictionary_from_encoded_data(
+        parse_algorithm_encoding(coded_algorithm)
+    )
 
 
 def open_port():
