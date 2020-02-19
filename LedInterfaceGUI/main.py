@@ -150,9 +150,11 @@ def get_led_order_to_indicator_dictionary_from_encoded_data(encoded_data):
     return led_order_to_indicator
 
 
-def get_led_order_to_indicator_dictionary_and_delay_value_from_coded_algorithm(coded_algorithm):
+def get_led_order_to_indicator_dictionary_and_description_from_coded_algorithm(coded_algorithm):
     parsed_encoding = parse_algorithm_encoding(coded_algorithm)
-    return get_led_order_to_indicator_dictionary_from_encoded_data(parsed_encoding[:-1]), parsed_encoding[-1]
+    return get_led_order_to_indicator_dictionary_from_encoded_data(parsed_encoding[:-2]), \
+           {'delay': parsed_encoding[-2] / 1000,
+            'simultaneous_activation': min(parsed_encoding[-1], LED_NUMBER)}
 
 
 def open_port():
@@ -169,22 +171,24 @@ def read_from_port():
         if serial_port.isOpen():
             data = serial_port.readline()
             if data:
-                led_order_to_indicator, delay = \
-                    get_led_order_to_indicator_dictionary_and_delay_value_from_coded_algorithm(data)
+                led_order_to_indicator, description = \
+                    get_led_order_to_indicator_dictionary_and_description_from_coded_algorithm(data)
                 start_algorithm_animation(led_order_to_indicator=led_order_to_indicator,
-                                          delay=delay / 1000,
+                                          delay=description['delay'],
+                                          simultaneous_activation=description['simultaneous_activation'],
                                           event=event)
-
         event.wait(PORT_CHECKING_INTERVAL)
 
 
-def start_algorithm_animation(led_order_to_indicator, delay, event):
+def start_algorithm_animation(led_order_to_indicator, delay, simultaneous_activation, event):
     global led_indicators
 
-    for order in range(len(led_order_to_indicator)):
-        turn_on_led(led_indicators[led_order_to_indicator[order]])
+    for order in range(0, len(led_order_to_indicator), simultaneous_activation):
+        for i in range(simultaneous_activation):
+            turn_on_led(led_indicators[led_order_to_indicator[order + i]])
         event.wait(delay)
-        turn_off_led(led_indicators[led_order_to_indicator[order]])
+        for i in range(simultaneous_activation):
+            turn_off_led(led_indicators[led_order_to_indicator[order + i]])
 
 
 def start_algorithm1():
