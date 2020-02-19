@@ -119,8 +119,6 @@ class AppGUI:
         for led_indicator in led_indicators:
             led_indicator[0].pack(side=LEFT, padx=led_frame_padding['x'], pady=led_frame_padding['y'])
 
-        turn_on_led(led_indicators[1])
-
 
 def turn_on_led(led_indicator):
     global app_is_running
@@ -171,11 +169,22 @@ def read_from_port():
         if serial_port.isOpen():
             data = serial_port.readline()
             if data:
-                print(data)
-                turn_on_led(led_indicators[0])
-                event.wait(0.2)
-                turn_off_led(led_indicators[0])
+                led_order_to_indicator, delay = \
+                    get_led_order_to_indicator_dictionary_and_delay_value_from_coded_algorithm(data)
+                start_algorithm_animation(led_order_to_indicator=led_order_to_indicator,
+                                          delay=delay / 1000,
+                                          event=event)
+
         event.wait(PORT_CHECKING_INTERVAL)
+
+
+def start_algorithm_animation(led_order_to_indicator, delay, event):
+    global led_indicators
+
+    for order in range(len(led_order_to_indicator)):
+        turn_on_led(led_indicators[led_order_to_indicator[order]])
+        event.wait(delay)
+        turn_off_led(led_indicators[led_order_to_indicator[order]])
 
 
 def start_algorithm1():
