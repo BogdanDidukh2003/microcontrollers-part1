@@ -11,7 +11,7 @@ LED_ICON_SIZE = 40
 LED_NUMBER = 8
 LED_OFF = 'skyblue'
 LED_ON = 'red'
-WINDOW_MIN_HEIGHT = 260
+WINDOW_MIN_HEIGHT = 280
 
 app_is_running = True
 led_indicators = list
@@ -54,7 +54,7 @@ class AppGUI:
 
         port_label = tk.Label(
             port_frame,
-            text='Choose port',
+            text='Select port',
             font=('Verdana', 12),
         )
         port_name_variable = tk.StringVar(window)
