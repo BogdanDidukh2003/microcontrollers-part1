@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import TOP, BOTTOM, LEFT
 import serial
 import threading
-from time import sleep
 
 PORT_CHECKING_INTERVAL = 0.1
 SERIAL_PORTS_PATH = './SerialPorts'
@@ -153,10 +152,9 @@ def get_led_order_to_indicator_dictionary_from_encoded_data(encoded_data):
     return led_order_to_indicator
 
 
-def get_led_order_to_indicator_dictionary_from_coded_algorithm(coded_algorithm):
-    return get_led_order_to_indicator_dictionary_from_encoded_data(
-        parse_algorithm_encoding(coded_algorithm)
-    )
+def get_led_order_to_indicator_dictionary_and_delay_value_from_coded_algorithm(coded_algorithm):
+    parsed_encoding = parse_algorithm_encoding(coded_algorithm)
+    return get_led_order_to_indicator_dictionary_from_encoded_data(parsed_encoding[:-1]), parsed_encoding[-1]
 
 
 def open_port():
@@ -190,4 +188,3 @@ def start_algorithm2():
 
 if __name__ == '__main__':
     main()
-
