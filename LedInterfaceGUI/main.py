@@ -37,7 +37,6 @@ def main():
     app_is_running = False
 
     exit()
-    serial_communication.join()
 
 
 class AppGUI:
