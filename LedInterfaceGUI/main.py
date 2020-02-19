@@ -163,14 +163,16 @@ def open_port():
 
     try:
         serial_port = serial.Serial(selected_port)
-    except serial.serialutil.SerialException:
+    except serial.serialutil.SerialException as e:
         serial_port.close()
         if app_is_running:
-            messagebox.showerror('Error', 'Cannot open serial port')
+            messagebox.showerror('Error', e.strerror)
+    else:
+        messagebox.showinfo(selected_port, 'Port is opened successfully')
 
 
 def read_from_port():
-    global app_is_running, led_indicators
+    global app_is_running, led_indicators, serial_port
 
     event = threading.Event()
     while app_is_running:
