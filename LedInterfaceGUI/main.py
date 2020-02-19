@@ -3,6 +3,7 @@ from tkinter import TOP, BOTTOM, LEFT, messagebox
 import serial
 import threading
 import re
+from sys import exit
 
 PORT_CHECKING_INTERVAL = 0.1
 SERIAL_PORTS_PATH = './SerialPorts'
@@ -27,6 +28,7 @@ def main():
         ports = list(filter(None, file.read().split('\n')))
 
     serial_communication = threading.Thread(target=read_from_port)
+    serial_communication.daemon = True
     serial_communication.start()
 
     window = tk.Tk()
@@ -34,6 +36,7 @@ def main():
     window.mainloop()
     app_is_running = False
 
+    exit()
     serial_communication.join()
 
 
