@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import TOP, BOTTOM, LEFT, messagebox
 import serial
 import threading
+import re
 
 PORT_CHECKING_INTERVAL = 0.1
 SERIAL_PORTS_PATH = './SerialPorts'
@@ -175,13 +176,14 @@ def read_from_port():
     while app_is_running:
         if serial_port.isOpen():
             data = serial_port.readline()
-            if data:
+            if re.match(r'b\'([0-9]+,){9}[0-9]+.{4}\'', str(data)):
                 led_order_to_indicator, description = \
                     get_led_order_to_indicator_dictionary_and_description_from_coded_algorithm(data)
                 start_algorithm_animation(led_order_to_indicator=led_order_to_indicator,
                                           delay=description['delay'],
                                           simultaneous_activation=description['simultaneous_activation'],
                                           event=event)
+                serial_port.reset_input_buffer()
         event.wait(PORT_CHECKING_INTERVAL)
 
 
