@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import TOP, BOTTOM, LEFT
+from tkinter import TOP, BOTTOM, LEFT, messagebox
 import serial
 import threading
 
@@ -158,9 +158,14 @@ def get_led_order_to_indicator_dictionary_and_description_from_coded_algorithm(c
 
 
 def open_port():
-    global serial_port
-    serial_port = serial.Serial(selected_port)
-    print(selected_port, 'opened...')
+    global app_is_running, serial_port
+
+    try:
+        serial_port = serial.Serial(selected_port)
+    except serial.serialutil.SerialException:
+        serial_port.close()
+        if app_is_running:
+            messagebox.showerror('Error', 'Cannot open serial port')
 
 
 def read_from_port():
