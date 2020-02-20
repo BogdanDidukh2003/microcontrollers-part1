@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import TOP, BOTTOM, LEFT, messagebox
 import serial
+import serial.tools.list_ports as lp
 import threading
 import re
 from sys import exit
@@ -24,8 +25,11 @@ def main():
     global app_is_running, ports
     app_is_running = True
 
-    with open(SERIAL_PORTS_PATH, 'r') as file:
-        ports = list(filter(None, file.read().split('\n')))
+    for port in sorted(lp.comports()):
+        ports.append(port.device)
+    if not ports:
+        with open(SERIAL_PORTS_PATH, 'r') as file:
+            ports = list(filter(None, file.read().split('\n')))
 
     serial_communication = threading.Thread(target=read_from_port)
     serial_communication.daemon = True
