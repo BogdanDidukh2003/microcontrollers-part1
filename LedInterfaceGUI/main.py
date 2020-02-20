@@ -208,12 +208,12 @@ def start_algorithm_animation(led_order_to_indicator, delay, simultaneous_activa
 
 def start_algorithm1():
     if serial_port.isOpen():
-        serial_port.write(1)
+        serial_port.write(b'1')
 
 
 def start_algorithm2():
     if serial_port.isOpen():
-        serial_port.write(2)
+        serial_port.write(b'2')
 
 
 if __name__ == '__main__':
