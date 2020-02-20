@@ -6,6 +6,7 @@ import threading
 import re
 from sys import exit
 
+BAUDRATE = 9600
 PORT_CHECKING_INTERVAL = 0.1
 SERIAL_PORTS_PATH = './SerialPorts'
 LED_ICON_SIZE = 40
@@ -168,7 +169,7 @@ def open_port():
     global app_is_running, serial_port
 
     try:
-        serial_port = serial.Serial(selected_port)
+        serial_port = serial.Serial(selected_port, BAUDRATE)
     except serial.serialutil.SerialException as e:
         serial_port.close()
         if app_is_running:
