@@ -22,3 +22,7 @@ Algorithm1:
 
 Algorithm2:
 <code>P0, P7 → P1, P6 → P2, P5 → P3, P4</code>
+
+### Lab3
+
+Realization of stopwatch with memory for 60 records using liquid crystal display and 4x4 keypad
