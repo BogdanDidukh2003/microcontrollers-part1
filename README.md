@@ -26,3 +26,11 @@ Algorithm2:
 ### Lab3
 
 Realization of stopwatch with memory for 60 records using liquid crystal display and 4x4 keypad
+
+### Lab7
+
+Realization of stopwatch (kind of) with memory for 10 records using 7-segment CA display
+
+### Note
+
+Schemes of circuits (in PDF) are stored ![here](./res)
