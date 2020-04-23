@@ -31,6 +31,18 @@ Realization of stopwatch with memory for 60 records using liquid crystal display
 
 Realization of stopwatch (kind of) with memory for 10 records using 7-segment CA display
 
+
+### Lab8
+
+Algorithm for lighting 8 leds written in Assembly.
+Pressing buttons connected to the board activates apropriate independent algorithm
+
+Algorithm1:
+<code>P7 → P0 → P6 → P1 → P5 → P2 → P4 → P3</code>
+
+Algorithm2:
+<code>P0, P7 → P1, P6 → P2, P5 → P3, P4</code>
+
 ### Note
 
 Schemes of circuits (in PDF) are stored ![here](./res)
