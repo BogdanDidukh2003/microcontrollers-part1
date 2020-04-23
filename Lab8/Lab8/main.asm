@@ -97,22 +97,6 @@ end_algorithm2:
 
 end_timer5:
 		reti
-		/*sbrs	_logic, 0
-		rjmp	end_timer5
-		in		_temp1, PORTA
-		ldi		_temp2, 0xFF
-		eor		_temp1, _temp2
-		out		PORTA, _temp1
-		inc		_counter
-		cpi		_counter, 16
-		brne	end_timer5
-		clr		_counter
-		; end of logic for blinking
-		;_logic bit0 = 0
-		clt ;	?=0
-		bld		_logic, 0
-end_timer5:
-		reti*/
 		
 reset:		
 		; stack initialization
