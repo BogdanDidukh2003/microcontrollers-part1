@@ -36,6 +36,7 @@ def main():
     window = tk.Tk()
     _ = AppGUI(window)
     window.mainloop()
+    serial_port.close()
     app_is_running = False
     serial_communication.join()
 
