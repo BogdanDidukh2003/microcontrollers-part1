@@ -17,6 +17,7 @@ serial_port = serial.Serial()
 SLAVE1 = 'Slave 1'
 SLAVE2 = 'Slave 2'
 data_sections = dict.fromkeys((SLAVE1, SLAVE2))
+selected_slave = SLAVE1
 
 
 def main():
@@ -138,14 +139,16 @@ class AppGUI:
 
 
 def request_data_from_slave1():
-    global serial_port
+    global serial_port, selected_slave
     if serial_port.isOpen():
+        selected_slave = SLAVE1
         serial_port.write(b'1')
 
 
 def request_data_from_slave2():
-    global serial_port
+    global serial_port, selected_slave
     if serial_port.isOpen():
+        selected_slave = SLAVE2
         serial_port.write(b'2')
 
 
@@ -170,13 +173,14 @@ def open_port():
 
 
 def read_from_port():
-    global app_is_running, serial_port
+    global app_is_running, serial_port, selected_slave
 
     event = threading.Event()
     while app_is_running:
         if serial_port.isOpen():
-            data = serial_port.readline()
-            print(data)
+            data = serial_port.read()
+            if data:
+                show_data(selected_slave, data)
         event.wait(PORT_CHECKING_INTERVAL)
 
 
