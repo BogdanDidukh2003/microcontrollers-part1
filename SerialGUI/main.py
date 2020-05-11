@@ -188,7 +188,12 @@ def read_from_port():
         if serial_port.isOpen():
             data = serial_port.read()
             if data:
+                # TODO: Implement filtering of data
                 show_data(selected_slave, data)
+                # Example:
+                # e.g. data = '123'
+                # e.g. crc = 0x7884
+                # Then: result = check_crc(data, crc, CRC_BIT_LENGTH, POLY, INIT_CRC, REF_IN, REF_OUT, XOR_OUT)
         event.wait(PORT_CHECKING_INTERVAL)
 
 
