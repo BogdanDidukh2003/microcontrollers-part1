@@ -6,7 +6,6 @@ import serial
 import serial.tools.list_ports as lp
 
 BAUD_RATE = 9600
-PORT_CHECKING_INTERVAL = 0.1
 SERIAL_PORTS_PATH = './DefaultSerialPorts'
 WINDOW_MIN_HEIGHT = 400
 
@@ -183,7 +182,6 @@ def open_port():
 def read_from_port():
     global app_is_running, serial_port, selected_slave
 
-    event = threading.Event()
     while app_is_running:
         if serial_port.isOpen():
             data = serial_port.read()
@@ -194,7 +192,6 @@ def read_from_port():
                 # e.g. data = '123'
                 # e.g. crc = 0x7884
                 # Then: result = check_crc(data, crc, CRC_BIT_LENGTH, POLY, INIT_CRC, REF_IN, REF_OUT, XOR_OUT)
-        event.wait(PORT_CHECKING_INTERVAL)
 
 
 def check_crc(data, crc, crc_bit_length, poly, init_crc, in_ref, res_ref, final_xor):
