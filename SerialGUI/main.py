@@ -91,6 +91,8 @@ class AppGUI:
         data_section_slave2 = tk.Text(data_frame, state='disabled', height=10, width=25, bg='black', fg='white')
         data_sections[SLAVE1] = data_section_slave1
         data_sections[SLAVE2] = data_section_slave2
+        data_sections[SLAVE1].tag_configure('warning', foreground='red')
+        data_sections[SLAVE2].tag_configure('warning', foreground='red')
 
         from_slave1_button = tk.Button(
             button_frame,
@@ -159,9 +161,18 @@ def request_data_from_slave2():
         serial_port.write(b'2')
 
 
-def show_data(slave, data):
+def show_data(slave, data, is_warning=False):
+    """
+    :param slave: SLAVE1 or SLAVE2 constant to specify screen for receiving data
+    :param data: actual text to print on the screen
+    :param is_warning: if True, make piece of text red
+    :return:
+    """
     data_sections[slave].configure(state='normal')
-    data_sections[slave].insert('end', data)
+    if is_warning:
+        data_sections[slave].insert('end', data, 'warning')
+    else:
+        data_sections[slave].insert('end', data)
     data_sections[slave].configure(state='disabled')
     data_sections[slave].see('end')
 
