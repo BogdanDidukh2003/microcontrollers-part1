@@ -1,3 +1,4 @@
+from functools import reduce
 import threading
 import tkinter as tk
 from tkinter import TOP, LEFT, RIGHT, messagebox
@@ -18,6 +19,13 @@ SLAVE1 = 'Slave 1'
 SLAVE2 = 'Slave 2'
 data_sections = dict.fromkeys((SLAVE1, SLAVE2))
 selected_slave = SLAVE1
+
+CRC_BIT_LENGTH = 16
+POLY = 0x3D65
+INIT_CRC = 0x0
+XOR_OUT = 0xFFFF
+REF_IN = False
+REF_OUT = False
 
 
 def main():
@@ -182,6 +190,52 @@ def read_from_port():
             if data:
                 show_data(selected_slave, data)
         event.wait(PORT_CHECKING_INTERVAL)
+
+
+def check_crc(data, crc, crc_bit_length, poly, init_crc, in_ref, res_ref, final_xor):
+    if isinstance(data, str):
+        data = convert_ascii_str_to_int_list(data)
+
+    poly_msb = 1 << (crc_bit_length - 1)
+    cutter = (1 << crc_bit_length) - 1
+
+    new_crc = init_crc
+
+    for i in range(len(data)):
+        temp = data[i]
+        if in_ref:
+            temp = reverse_bits(temp, 8)
+        temp <<= crc_bit_length - 8
+        new_crc ^= temp
+
+        for _ in range(8):
+            if (new_crc & poly_msb) != 0:
+                new_crc = (new_crc << 1) ^ poly
+            else:
+                new_crc <<= 1
+        new_crc &= cutter
+
+    if res_ref:
+        new_crc = reverse_bits(new_crc, crc_bit_length)
+    new_crc ^= final_xor
+
+    return new_crc == crc
+
+
+def reverse_bits(number, bits_quantity=None):
+    number = bin(number)[2:]
+
+    if bits_quantity is not None:
+        return int(''.join(number[::-1] + '0' * (bits_quantity - len(number))), 2)
+    return int(''.join(number[::-1]), 2)
+
+
+def convert_ascii_str_to_int_list(data):
+    return [convert_ascii_str_to_int(i) for i in data]
+
+
+def convert_ascii_str_to_int(data):
+    return reduce(lambda x, y: x | y, [ord(data[::-1][i]) * ((2 ** 8) ** i) for i in range(len(data))])
 
 
 if __name__ == '__main__':
